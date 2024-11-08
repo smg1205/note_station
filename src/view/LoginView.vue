@@ -2,39 +2,77 @@
 import {ref} from "vue"
 import {ElNotification} from "element-plus";
 import {ReqCodeMap} from "@/enums/ReqCodeMap.js";
+import routers from "@/router/routers.js";
+import {sleep_s} from "@/module/SleepModule.js";
 
+// false=Login true=register
 const LoginOrRegister = ref(true);
+// 表单数据
 const formData = ref({
   userName: "",
   pass: "",
   checkPass: "",
   email: "",
 })
+// 气泡框
+function actionPot(val){
+  ElNotification({
+    title: 'Info',
+    message: ReqCodeMap[`${val}`],
+    type: 'info',
+  })
+}
+// 名称是否存在特殊字符 首字母判断
+function validateName(userName){
+  return /^[a-zA-Z]/.test(userName)
+      && !/[^a-zA-Z0-9\u4e00-\u9fa5]/.test(userName)
+      && userName.length > 4
+      && userName.length < 10;
+}
+// 确认两次密码是否一致
+function validatePassword(password, checkPass){
+  return password === checkPass;
+}
+// 确认邮箱是否正确
+function validateEmail(email) {
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailPattern.test(email);
+}
+// 提交表单
+async function submitForm() {
+  if (LoginOrRegister.value) {
+    if (!validateName(formData.value.userName)) { // 如果 checkName 返回 false
+      actionPot("80001");
+      return;
+    }
+    if(!validatePassword(formData.value.pass, formData.value.checkPass)){
+      actionPot("80002")
+      return;
+    }
+    if(!validateEmail(formData.value.email)){
+      actionPot("80003")
+      return;
+    }
+  }
+  const count = 20001;
+  // TODO 完善登录逻辑 还有注册逻辑 将返回值给到count 由count给予反馈
+  actionPot(count)
+  // ******
 
-function submitForm(){
-  const count = 20011;
-  // TODO 完善登录逻辑
-  const ans = count % 10;
-  if(ans === 1){
-    ElNotification({
-      title: 'Success',
-      message: ReqCodeMap[`${count}`],
-      type: 'success',
-    })
-  }else{
-    ElNotification({
-      title: 'Error',
-      message: ReqCodeMap[`${count}`],
-      type: 'error',
-    })
+  if (count % 10 === 1) {
+      await sleep_s(1).then(()=>{
+        routers.push("/main");
+      })
   }
 }
+// 清空表单
 function resetForm(){
   formData.value.userName = "";
   formData.value.pass = "";
   formData.value.checkPass = "";
   formData.value.email = "";
 }
+// 切换注册和登录
 function toggleForm(){
   LoginOrRegister.value = !LoginOrRegister.value;
 }
@@ -46,39 +84,14 @@ function toggleForm(){
     <div class="lr-container">
       <transition name="fade" mode="out-in">
         <div :key="LoginOrRegister" class="lr-module">
-          <div v-if="!LoginOrRegister">
-            <h2>登录</h2>
-            <el-form
-                style="max-width: 25vw; min-width: 300px; margin-left: 10px;"
-                status-icon
-                label-width="auto"
-            >
-              <el-form-item label="UserName" prop="userName">
-                <el-input v-model="formData.userName" type="text" autocomplete="off" />
-              </el-form-item>
-              <el-form-item label="Password" prop="pass">
-                <el-input v-model="formData.pass" type="password" autocomplete="off" />
-              </el-form-item>
-              <el-form-item label="Confirm" prop="checkPass">
-                <el-input v-model="formData.checkPass" type="password" autocomplete="off" />
-              </el-form-item>
-              <el-form-item class="--item-center">
-                <el-button type="primary" @click="submitForm()">Submit</el-button>
-                <el-button @click="resetForm()">Reset</el-button>
-              </el-form-item>
-            </el-form>
-            <p>还没有账号？<a href="#" @click="toggleForm">注册</a></p>
-          </div>
-
           <div v-if="LoginOrRegister">
             <h2>注册</h2>
             <el-form
                 style="max-width: 25vw; min-width: 300px; margin-left: 10px;"
-                status-icon
                 label-width="auto"
             >
               <el-form-item label="UserName" prop="userName">
-                <el-input v-model="formData.userName" type="text" autocomplete="off" />
+                <el-input placeholder="昵称长度大于五位" v-model="formData.userName" type="text" autocomplete="off" />
               </el-form-item>
               <el-form-item label="Password" prop="pass">
                 <el-input v-model="formData.pass" type="password" autocomplete="off" />
@@ -95,6 +108,27 @@ function toggleForm(){
               </el-form-item>
             </el-form>
             <p>已有账号？<a href="#" @click="toggleForm">登录</a></p>
+          </div>
+
+          <div v-if="!LoginOrRegister">
+            <h2>登录</h2>
+            <el-form
+                style="max-width: 25vw; min-width: 300px; margin-left: 10px;"
+                status-icon
+                label-width="auto"
+            >
+              <el-form-item label="UserName" prop="userName" :style="{paddingTop: '20px'}">
+                <el-input v-model="formData.userName" type="text" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="Password" prop="pass" :style="{paddingTop: '20px'}">
+                <el-input v-model="formData.pass" type="password" autocomplete="off" />
+              </el-form-item>
+              <el-form-item class="--item-center" :style="{paddingTop: '20px'}">
+                <el-button type="primary" @click="submitForm()">Submit</el-button>
+                <el-button @click="resetForm()">Reset</el-button>
+              </el-form-item>
+            </el-form>
+            <p>还没有账号？<a href="#" @click="toggleForm">注册</a></p>
           </div>
         </div>
       </transition>
