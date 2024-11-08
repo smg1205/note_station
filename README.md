@@ -1,4 +1,7 @@
 # 文件说明
+## 快速启动
+npm install
+vite
 ## src/components
 组件
 ## src/router
