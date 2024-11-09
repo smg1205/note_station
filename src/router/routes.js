@@ -1,9 +1,16 @@
-
-import LoginView from "../view/LoginView.vue";
-import MainView from "../view/MainView.vue";
-import NotFoundView from "../view/NotFoundView.vue";
+import LoginView from "@/view/LoginView.vue";
+import MainView from "@/view/MainView.vue";
+import NotFoundView from "@/view/NotFoundView.vue";
+import UploadCom from "@/components/UploadCom.vue";
+import UserCenCom from "@/components/UserCenCom.vue";
+import IndexView from "@/view/IndexView.vue";
 
 const routes = [
+    {
+        path: '/',
+        name: 'index',
+        component: IndexView,
+    },
     {
         path: '/login',
         name: 'Login',
@@ -14,7 +21,17 @@ const routes = [
         name: 'Main',
         component: MainView ,
         children:[
+            {
+                path: '/main/upload',
+                name: 'Upload',
+                component: UploadCom,
 
+            },
+            {
+                path: '/main/user',
+                name: 'user',
+                component: UserCenCom,
+            }
         ]
     },
     {
