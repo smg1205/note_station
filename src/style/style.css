@@ -1,14 +1,5 @@
 html{
-  -webkit-animation: html 20s linear infinite alternate both;
-  animation: html 20s linear infinite alternate both;
-}
-
-@keyframes html {
-  0% { background-color: #455A64; }
-  25% { background-color: #37474F; }
-  50% { background-color: #757575; }
-  75% { background-color: #616161; }
-  100% { background-color: #424242; }
+  background-color: black;
 }
 /* 隐藏垂直滚动条 */
 ::-webkit-scrollbar {
@@ -16,4 +7,5 @@ html{
 }
 *{
   font-family: Sytf,serif;
+  color: #b2b2b2;
 }

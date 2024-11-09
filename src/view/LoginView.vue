@@ -1,83 +1,82 @@
 <script setup>
-import {ref} from "vue"
-import {ElNotification} from "element-plus";
-import {ReqCodeMap} from "@/enums/ReqCodeMap.js";
-import routers from "@/router/routers.js";
-import {sleep_s} from "@/module/SleepModule.js";
+import { ref } from 'vue';
+import { ElNotification } from 'element-plus';
+import { ReqCodeMap } from '@/enums/ReqCodeMap.js';
+import routers from '@/router/routers.js';
+import { sleep_s } from '@/module/SleepModule.js';
+import {getLoginStatus, Login} from "@/module/LoginStatusCookie.js";
 
-// false=Login true=register
-const LoginOrRegister = ref(true);
-// 表单数据
+const LoginOrRegister = ref(false);
 const formData = ref({
-  userName: "",
-  pass: "",
-  checkPass: "",
-  email: "",
-})
-// 气泡框
-function actionPot(val){
+  userName: '',
+  pass: '',
+  checkPass: '',
+  email: '',
+});
+
+function actionPot(val) {
   ElNotification({
     title: 'Info',
     message: ReqCodeMap[`${val}`],
     type: 'info',
-  })
+  });
 }
-// 名称是否存在特殊字符 首字母判断
-function validateName(userName){
+
+function validateName(userName) {
   return /^[a-zA-Z]/.test(userName)
       && !/[^a-zA-Z0-9\u4e00-\u9fa5]/.test(userName)
       && userName.length > 4
       && userName.length < 10;
 }
-// 确认两次密码是否一致
-function validatePassword(password, checkPass){
+
+function validatePassword(password, checkPass) {
   return password === checkPass;
 }
-// 确认邮箱是否正确
+
 function validateEmail(email) {
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return emailPattern.test(email);
 }
-// 提交表单
+
 async function submitForm() {
   if (LoginOrRegister.value) {
-    if (!validateName(formData.value.userName)) { // 如果 checkName 返回 false
-      actionPot("80001");
+    if (!validateName(formData.value.userName)) {
+      actionPot('80001');
       return;
     }
-    if(!validatePassword(formData.value.pass, formData.value.checkPass)){
-      actionPot("80002")
+    if (!validatePassword(formData.value.pass, formData.value.checkPass)) {
+      actionPot('80002');
       return;
     }
-    if(!validateEmail(formData.value.email)){
-      actionPot("80003")
+    if (!validateEmail(formData.value.email)) {
+      actionPot('80003');
       return;
     }
   }
   const count = 20001;
-  // TODO 完善登录逻辑 还有注册逻辑 将返回值给到count 由count给予反馈
-  actionPot(count)
-  // ******
+  Login();
+  console.log(getLoginStatus());
+  actionPot(count);
 
   if (count % 10 === 1) {
-      await sleep_s(1).then(()=>{
-        routers.push("/main");
-      })
+    await sleep_s(1).then(() => {
+      // routers.push('/main/upload');
+    });
   }
 }
-// 清空表单
-function resetForm(){
-  formData.value.userName = "";
-  formData.value.pass = "";
-  formData.value.checkPass = "";
-  formData.value.email = "";
+
+function resetForm() {
+  console.log(getLoginStatus())
+  formData.value.userName = '';
+  formData.value.pass = '';
+  formData.value.checkPass = '';
+  formData.value.email = '';
 }
-// 切换注册和登录
-function toggleForm(){
+
+function toggleForm() {
   LoginOrRegister.value = !LoginOrRegister.value;
 }
 </script>
-
 
 <template>
   <div class="login-view">
@@ -136,18 +135,7 @@ function toggleForm(){
   </div>
 </template>
 
-
 <style scoped>
-.puff-in-center {
-  -webkit-animation: puff-in-center 2s cubic-bezier(.47, 0.000, .745, .715) 2s both;
-  animation: puff-in-center 2s cubic-bezier(.47, 0.000, .745, .715) 2s both;
-}
-
-.puff-out-center{
-  -webkit-animation:puff-out-center 1s cubic-bezier(.165,.84,.44,1.000) both;
-  animation:puff-out-center 1s cubic-bezier(.165,.84,.44,1.000) both
-}
-
 .--item-center {
   align-items: center;
   padding-left: 8vw;
@@ -170,7 +158,7 @@ function toggleForm(){
   width: 30vw;
   height: 50vh;
   color: white;
-  transition: opacity 0.3s ease;
+  transition: opacity 1s ease;
 }
 
 .login-view {
