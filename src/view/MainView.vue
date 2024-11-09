@@ -34,7 +34,7 @@ import routers from "@/router/routers.js";  // 确保引入 el-avatar 组件
 }
 
 .slow-in {
-  animation: slowOutAnimation 0.7s ease-out forwards;
+  animation: slowOutAnimation 0.6s ease-out forwards;
 }
 
 .header {
