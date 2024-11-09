@@ -1,5 +1,5 @@
 html{
-  background-color: black;
+  background-color: #222222;
 }
 /* 隐藏垂直滚动条 */
 ::-webkit-scrollbar {
@@ -8,4 +8,8 @@ html{
 *{
   font-family: Sytf,serif;
   color: #b2b2b2;
+}
+html.dark {
+  /* 自定义深色背景颜色 */
+  --el-bg-color: #222222;
 }

@@ -1,4 +1,5 @@
 <script setup>
+import {UploadFilled} from "@element-plus/icons-vue";
 </script>
 
 <template>
@@ -11,7 +12,11 @@
     <el-col :span="6"><div/></el-col>
     <el-col :span="12">
       <span class="upload-container">
-
+        <el-icon class="el-icon--upload" :size="208"><upload-filled /></el-icon>
+        <br>
+          <span class="upload-content">
+            拖拽文件或<span class="upload-content-click">点击到此处上传</span>
+          </span>
       </span>
     </el-col>
     <el-col :span="6"><div/></el-col>
@@ -19,6 +24,15 @@
 </template>
 
 <style scoped>
+
+
+.upload-content{
+  font-size: 20px;
+}
+.upload-content-click{
+  cursor: pointer;
+  color: #1bbecb;
+}
 @keyframes scale-in-top {
   0% {
     -webkit-transform: scale(0);
@@ -47,6 +61,6 @@
   background-color: #cdcdcd;
   justify-content: center;
   align-items: center;
-  animation: scale-in-top 0.7s linear;
+  animation: scale-in-top 0.5s linear;
 }
 </style>
