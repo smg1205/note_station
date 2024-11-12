@@ -1,9 +1,19 @@
 <script setup>
 import "@/style/out-in.css"
 import {ArrowLeft, UserFilled} from "@element-plus/icons-vue";
-import { ElAvatar } from 'element-plus';
-import routers from "@/router/routers.js";  // 确保引入 el-avatar 组件
+import {ElAvatar, ElNotification} from 'element-plus';
+import routers from "@/router/routers.js";
+import {Logout} from "@/module/LoginStatusCookie.js";
 
+function message(){
+  ElNotification({
+    title: 'Info',
+    message: "退出登录",
+    type: 'info',
+  });
+  Logout();
+  routers.push('/');
+}
 </script>
 
 <template>
@@ -14,9 +24,24 @@ import routers from "@/router/routers.js";  // 确保引入 el-avatar 组件
           <el-icon :size="36" class="back-button" @click="()=>{routers.go(-1)}">
             <ArrowLeft />
           </el-icon>
-          <span class="user-avatar" @click="()=>{routers.push('/main/user')}">
-            <el-avatar :icon="UserFilled" />
-          </span>
+
+          <el-popover
+              placement="bottom"
+              trigger="hover"
+          >
+            <template #reference>
+              <span class="user-avatar">
+                <el-avatar :icon="UserFilled" />
+              </span>
+            </template>
+            <div  @click="()=>{routers.push('/main/user')}" class="--uu-click">
+              进入个人空间 click
+            </div>
+            <div @click="message" class="--uu-click">
+              退出当前登录 click
+            </div>
+          </el-popover>
+
         </div>
         <hr class="slow-in">
       </el-header>
@@ -28,6 +53,12 @@ import routers from "@/router/routers.js";  // 确保引入 el-avatar 组件
 </template>
 
 <style scoped>
+.--uu-click{
+  cursor: pointer;
+}
+.--uu-click:hover{
+  color: #90CAF9;
+}
 @keyframes slowOutAnimation {
   from{width: 0;}
   to{width: 100%;}

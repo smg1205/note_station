@@ -4,7 +4,7 @@ import { ElNotification } from 'element-plus';
 import { ReqCodeMap } from '@/enums/ReqCodeMap.js';
 import routers from '@/router/routers.js';
 import { sleep_s } from '@/module/SleepModule.js';
-import {getLoginStatus, Login} from "@/module/LoginStatusCookie.js";
+import {getLoginStatus, Login, Logout} from "@/module/LoginStatusCookie.js";
 
 const LoginOrRegister = ref(false);
 const formData = ref({
@@ -53,6 +53,7 @@ async function submitForm() {
       return;
     }
   }
+
   const count = 20001;
   Login();
   console.log(getLoginStatus());
@@ -60,7 +61,7 @@ async function submitForm() {
 
   if (count % 10 === 1) {
     await sleep_s(1).then(() => {
-      // routers.push('/main/upload');
+      routers.push('/main/upload');
     });
   }
 }

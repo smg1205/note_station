@@ -10,6 +10,7 @@ import '@/assets/fonts/font.css'
 import ArcoVue from '@arco-design/web-vue';
 import '@arco-design/web-vue/dist/arco.css';
 import 'element-plus/theme-chalk/dark/css-vars.css'
+
 // highlightjs 核心代码
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
@@ -31,5 +32,11 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
-app.use(ElementPlus).use(createPinia()).use(routers).use(ArcoVue).use(VueMarkdownEditor).use(VMdPreview)
+app.use(ElementPlus)
+    .use(createPinia())
+    .use(routers)
+    .use(ArcoVue)
+    .use(VueMarkdownEditor)
+    .use(VMdPreview)
+
 app.mount('#app')
