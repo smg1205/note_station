@@ -13,6 +13,11 @@ router.beforeEach((to, from) => {
             path:"/login",
         }
     }
+    if(to.path === '/login' && getLoginStatus()){
+        return{
+            path: "/",
+        }
+    }
 })
 
 export default router;

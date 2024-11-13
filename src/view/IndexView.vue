@@ -18,7 +18,6 @@ function goToLogin() {
   <div class="center-view">
     <div class="div-h1">欢迎来到<span class="marker-evy">Share</span></div>
     <h1 @click="goToLogin" class="marker-evy">开始旅程</h1>
-
   </div>
 </template>
 
@@ -26,8 +25,7 @@ function goToLogin() {
 .div-h1{
   font-size: 40px;
 }
-h2 {
+h1 {
   cursor: pointer;
-  color: #ad8989;
 }
 </style>
