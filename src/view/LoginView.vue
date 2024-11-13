@@ -12,6 +12,7 @@ const formData = ref({
   pass: '',
   checkPass: '',
   email: '',
+  ensureCode: ''
 });
 
 function actionPot(val) {
@@ -54,7 +55,7 @@ async function submitForm() {
     }
   }
 
-  const count = 20001;
+  const count = 20001;// TODO 登录
   Login();
   console.log(getLoginStatus());
   actionPot(count);
@@ -67,11 +68,11 @@ async function submitForm() {
 }
 
 function resetForm() {
-  console.log(getLoginStatus())
   formData.value.userName = '';
   formData.value.pass = '';
   formData.value.checkPass = '';
   formData.value.email = '';
+  formData.value.ensureCode = '';
 }
 
 function toggleForm() {
@@ -83,24 +84,29 @@ function toggleForm() {
   <div class="login-view">
     <div class="lr-container">
       <transition name="fade" mode="out-in">
-        <div :key="LoginOrRegister" class="lr-module">
+        <div :key="LoginOrRegister"
+             :class="LoginOrRegister ? 'lr-module-register' : 'lr-module-login'"
+        >
           <div v-if="LoginOrRegister">
             <h2>注册</h2>
             <el-form
-                style="max-width: 25vw; min-width: 300px; margin-left: 10px;"
+                style="max-width: 25vw; min-width: 200px; margin-left: 10px;"
                 label-width="auto"
             >
               <el-form-item label="UserName" prop="userName">
                 <el-input placeholder="昵称长度大于五位" v-model="formData.userName" type="text" autocomplete="off" />
               </el-form-item>
               <el-form-item label="Password" prop="pass">
-                <el-input v-model="formData.pass" type="password" autocomplete="off" />
+                <el-input placeholder="输入密码" v-model="formData.pass" type="password" autocomplete="off" />
               </el-form-item>
               <el-form-item label="Confirm" prop="checkPass">
-                <el-input v-model="formData.checkPass" type="password" autocomplete="off" />
+                <el-input placeholder="再次输入密码" v-model="formData.checkPass" type="password" autocomplete="off" />
               </el-form-item>
               <el-form-item label="Email" prop="email">
-                <el-input v-model="formData.email" type="text" autocomplete="off" />
+                <el-input placeholder="输入邮箱" v-model="formData.email" type="text" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="EnsureCode" prop="EnsureCode">
+                <el-input placeholder="输入邮箱验证码" v-model="formData.ensureCode" type="text" autocomplete="off" />
               </el-form-item>
               <el-form-item class="--item-center">
                 <el-button type="primary" @click="submitForm()">Submit</el-button>
@@ -149,12 +155,20 @@ function toggleForm() {
   align-items: center; /* 垂直居中 */
   height: 100%;
 }
-
-.lr-module {
+.lr-module-login {
   border-radius: 5px;
   background-color: #2b2b2b;
-  min-height: 350px;
-  max-height: 350px;
+  min-height: 300px;
+  border: 1px white solid;
+  width: 30vw;
+  height: 30vh;
+  color: white;
+  transition: opacity 1s ease;
+}
+.lr-module-register {
+  border-radius: 5px;
+  background-color: #2b2b2b;
+  min-height: 400px;
   border: 1px white solid;
   width: 30vw;
   height: 50vh;
