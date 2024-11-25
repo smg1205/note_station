@@ -5,6 +5,9 @@ import { ReqCodeMap } from '@/enums/ReqCodeMap.js';
 import routers from '@/router/routers.js';
 import { sleep_s } from '@/module/SleepModule.js';
 import {getLoginStatus, Login, Logout} from "@/module/LoginStatusCookie.js";
+import {Message} from "@element-plus/icons-vue";
+import {LoginModule} from "@/module/LoginModule.js";
+import {RegisterModule} from "@/module/RegisterModule.js";
 
 const LoginOrRegister = ref(false);
 const formData = ref({
@@ -51,19 +54,16 @@ async function submitForm() {
     }
     if (!validateEmail(formData.value.email)) {
       actionPot('80003');
-      return;
     }
-  }
-
-  const count = 20001;// TODO 登录
-  Login();
-  console.log(getLoginStatus());
-  actionPot(count);
-
-  if (count % 10 === 1) {
-    await sleep_s(1).then(() => {
-      routers.push('/main/upload');
-    });
+    console.log("REGISTER")
+    await RegisterModule(
+        formData.value.userName,
+        formData.value.pass,
+        formData.value.email,
+        formData.value.checkPass
+    );
+  }else{
+    await LoginModule(formData.value.userName, formData.value.pass)
   }
 }
 
@@ -73,6 +73,10 @@ function resetForm() {
   formData.value.checkPass = '';
   formData.value.email = '';
   formData.value.ensureCode = '';
+}
+
+function sendEmailCode(){
+  console.log(111)
 }
 
 function toggleForm() {
@@ -105,9 +109,11 @@ function toggleForm() {
               <el-form-item label="Email" prop="email">
                 <el-input placeholder="输入邮箱" v-model="formData.email" type="text" autocomplete="off" />
               </el-form-item>
-              <el-form-item label="EnsureCode" prop="EnsureCode">
-                <el-input placeholder="输入邮箱验证码" v-model="formData.ensureCode" type="text" autocomplete="off" />
-              </el-form-item>
+<!--              <el-form-item label="EnsureCode" prop="EnsureCode">-->
+<!--                <el-input placeholder="点击右侧发送验证码" v-model="formData.ensureCode" type="text" autocomplete="off">-->
+<!--                  <template #append><el-icon :size="24" @click="sendEmailCode"><Message /></el-icon></template>-->
+<!--                </el-input>-->
+<!--              </el-form-item>-->
               <el-form-item class="--item-center">
                 <el-button type="primary" @click="submitForm()">Submit</el-button>
                 <el-button @click="resetForm()">Reset</el-button>

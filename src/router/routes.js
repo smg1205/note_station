@@ -38,7 +38,7 @@ const routes = [
                 meta:{requiresAuth: true},
             },
             {
-                path: '/main/preview/:uuid',
+                path: '/main/preview/:uuid/:fileName',
                 name: 'Preview',
                 props: true,
                 component: PreView,
