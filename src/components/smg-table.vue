@@ -5,7 +5,7 @@ defineProps({
   data: { type: Array },
 })
 function jump(item){
-  routers.push(`/main/preview/${item.address}`)
+  routers.push(`/main/preview/${item.address}/${item.title}`)
 }
 </script>
 

@@ -1,66 +1,150 @@
 <script setup>
-import {UploadFilled} from "@element-plus/icons-vue";
+import { ref } from 'vue';
+import axios from 'axios';
+import {getToken} from "@/module/TokenModule.js";
+
+const isDragging = ref(false);
+const file = ref(null);
+const fileName = ref("");
+const fileInput = ref(null);
+
+// Trigger file selection dialog
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
+
+// Handle file selection
+const handleFileChange = (event) => {
+  const selectedFile = event.target.files[0];
+  if (selectedFile) {
+    file.value = selectedFile;
+    fileName.value = selectedFile.name;
+  }
+};
+
+// Handle drag enter
+const handleDragEnter = () => {
+  isDragging.value = true;
+};
+
+// Handle drag leave
+const handleDragLeave = () => {
+  isDragging.value = false;
+};
+
+// Handle drop
+const handleDrop = (event) => {
+  isDragging.value = false; // Cancel dragging state
+  const droppedFile = event.dataTransfer.files[0]; // Get the dropped file
+  if (droppedFile) {
+    file.value = droppedFile;
+    fileName.value = droppedFile.name;
+  }
+};
+
+// Upload file to server
+const uploadFile = () => {
+  if (!file.value) {
+    console.error("No file selected for upload.");
+    return;
+  }
+
+  console.log(file.value);
+
+  // Use axios to upload the file
+  const formData = new FormData();
+  formData.append("file", file.value); // Append the selected file
+
+  axios
+      .post("http://localhost:8088/api/files/upload", {
+        "file": file.value,
+        "token" : getToken()
+      }, {
+        headers: {
+          "Content-Type": "multipart/form-data; charset=utf-8",
+        },
+      })
+      .then((response) => {
+        console.log("File uploaded successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("File upload failed:", error);
+      });
+};
 </script>
 
 <template>
-  <el-row>
-    <el-col :span="11"><div/></el-col>
-    <el-col :span="3"><h1>分享您的文件</h1></el-col>
-    <el-col :span="10"><div/></el-col>
-  </el-row>
-  <el-row>
-    <el-col :span="6"><div/></el-col>
-    <el-col :span="12">
-      <span class="upload-container">
-        <el-icon class="el-icon--upload" :size="208"><upload-filled /></el-icon>
-        <br>
-          <span class="upload-content">
-            拖拽文件或<span class="upload-content-click">点击到此处上传</span>
-          </span>
-      </span>
-    </el-col>
-    <el-col :span="6"><div/></el-col>
-  </el-row>
+  <div id="app" class="centered-container">
+    <div
+        class="upload-container"
+        @dragover.prevent
+        @drop.prevent="handleDrop"
+        @dragenter="handleDragEnter"
+        @dragleave="handleDragLeave"
+    >
+      <div class="upload-zone" :class="{ 'is-dragging': isDragging }" @click="triggerFileInput">
+        <p>将文件拖到此处上传，或点击选择文件</p>
+        <input
+            type="file"
+            ref="fileInput"
+            @change="handleFileChange"
+            style="display: none"
+        />
+      </div>
+    </div>
+    <button @click="uploadFile">
+      点击上传
+    </button>
+    <!-- Display uploaded file name -->
+    <div v-if="fileName">
+      <h3>上传的文件:</h3>
+      <p>{{ fileName }}</p>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-
-
-.upload-content{
-  font-size: 20px;
-}
-.upload-content-click{
-  cursor: pointer;
-  color: #1bbecb;
-}
-@keyframes scale-in-top {
-  0% {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    -webkit-transform-origin: 50% 0%;
-    transform-origin: 50% 0%;
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    -webkit-transform-origin: 50% 0%;
-    transform-origin: 50% 0%;
-    opacity: 1;
-  }
-}
-
-
-.upload-container {
+/* Center the app container */
+.centered-container {
   display: flex;
-  border-radius: 10px;
-  width: 50vw;
-  height: 30vw;
-  min-width: 500px;
-  min-height: 300px;
-  background-color: #cdcdcd;
   justify-content: center;
   align-items: center;
-  animation: scale-in-top 0.5s linear;
+  height: 80vh; /* Full viewport height */
+  background-color: #222222;
+  flex-direction: column;
+}
+
+/* Upload container styles */
+.upload-container {
+  width: 50vw;
+  height: 50vh;
+  border: 2px dashed #aaa;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.upload-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  color: #aaa;
+  transition: background-color 0.3s;
+}
+
+.upload-zone.is-dragging {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.upload-container input[type="file"] {
+  display: none;
+}
+
+/* Add some margin to the upload button */
+button {
+  margin-top: 20px;
 }
 </style>

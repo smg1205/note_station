@@ -4,8 +4,8 @@ import SmgTable from "@/components/smg-table.vue";
 import { CaretLeft, CaretRight } from "@element-plus/icons-vue";
 
 const tableData = ref([
-  { title: 'aaa', name: '9.10', address: 'aaa'},
-  { title: 'bbb', name: '10.20', address: 'bbb' },
+  { title: 'aaa', name: '9.10', address: 'textExampleFile'},
+  { title: 'bbb', name: '10.20', address: 'text' },
   { title: 'ccc', name: '1.11', address: 'ccc' },
   { title: 'ddd', name: '3.13', address: 'ddd' },
   { title: 'aaa', name: '9.10', address: 'aaa' },
