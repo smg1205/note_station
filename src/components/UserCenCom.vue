@@ -11,11 +11,11 @@ const CountArray = [
 </script>
 
 <template>
-  <div class="count-container">
-    <Count v-for="item in CountArray" :key="item.title" :count="item.count" :title="item.title" />
-  </div>
-  <hr class="slow-in">
-  <div>
+<!--  <div class="count-container">-->
+<!--    <Count v-for="item in CountArray" :key="item.title" :count="item.count" :title="item.title" />-->
+<!--  </div>-->
+<!--  <hr class="slow-in">-->
+  <div> 
     <ListCom></ListCom>
   </div>
 </template>
