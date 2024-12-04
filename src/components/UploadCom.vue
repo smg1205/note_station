@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import {getToken} from "@/module/TokenModule.js";
+import {ElNotification} from "element-plus";
 
 const isDragging = ref(false);
 const file = ref(null);
@@ -65,7 +66,11 @@ const uploadFile = () => {
         },
       })
       .then((response) => {
-        console.log("File uploaded successfully:", response.data);
+        ElNotification({
+          title: 'Info',
+          message: "文件上传" + response.data,
+          type: 'info',
+        })
       })
       .catch((error) => {
         console.error("File upload failed:", error);

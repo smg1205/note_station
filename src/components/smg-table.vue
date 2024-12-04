@@ -5,7 +5,7 @@ defineProps({
   data: { type: Array },
 })
 function jump(item){
-  routers.push(`/main/preview/${item.address}/${item.title}`)
+  routers.push(`/main/preview/${item.fileUrl}/${item.filename}`)
 }
 </script>
 
@@ -17,24 +17,24 @@ function jump(item){
     </el-row>
     <el-row v-for="item in data" :key="item.title" :class="['--el-row-context', item.index % 2 ? 'jishu' : '']" >
       <el-col :span="12">
-        <div class="box"><span>|{{item.title}}</span></div>
+        <div class="box"><span>|{{item.filename}}</span></div>
       </el-col>
       <el-col :span="6">
-        <div class="box"><span>|{{item.name}}</span></div>
+        <div class="box"><span>|{{item.createTime}}</span></div>
       </el-col>
       <el-col :span="6">
-        <div class="box" @click="jump(item)"><a>|{{item.address}}</a></div>
+        <div aria-hidden="true" class="box" @click="jump(item)"><a>|{{item.fileUrl}}</a></div>
       </el-col>
     </el-row>
 </template>
 
 <style scoped>
 .--el-row-header{
-  font-size: 20px;
+  font-size: 17px;
 }
 .--el-row-context{
   padding-top: 10px;
-  font-size: 25px;
+  font-size: 17px;
 }
 .box {
   width: 100%;

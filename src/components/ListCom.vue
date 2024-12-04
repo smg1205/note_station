@@ -1,7 +1,16 @@
 <script setup>
-import { ref, computed } from 'vue';
+import {computed, ref, onMounted} from 'vue';
 import SmgTable from "@/components/smg-table.vue";
-import { CaretLeft, CaretRight } from "@element-plus/icons-vue";
+import {CaretLeft, CaretRight} from "@element-plus/icons-vue";
+import {GetDataList} from "@/module/FileListModule.js";
+
+
+onMounted(async () => {
+  tableData.value = await GetDataList(); // 更新 tableData
+  console.log(tableData);
+});
+
+
 
 const tableData = ref([
   { title: 'aaa', name: '9.10', address: 'textExampleFile'},
